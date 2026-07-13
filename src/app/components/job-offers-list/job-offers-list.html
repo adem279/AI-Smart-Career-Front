@@ -1,0 +1,42 @@
+<div class="page-header">
+  <h1>Offres d'emploi</h1>
+  <p>Découvrez les opportunités qui vous correspondent</p>
+</div>
+
+@if (isLoading()) {
+  <p class="text-muted">Chargement des offres...</p>
+}
+
+@if (errorMessage()) {
+  <div class="error-message">{{ errorMessage() }}</div>
+}
+
+@if (!isLoading() && jobOffers().length === 0 && !errorMessage()) {
+  <div class="empty-state card">
+    <p>Aucune offre disponible pour le moment.</p>
+  </div>
+}
+
+<div class="offers-grid">
+  @for (offer of jobOffers(); track offer.id) {
+    <div class="offer-card card-flat">
+      <div class="offer-card-header">
+        <h3>{{ offer.title }}</h3>
+        <span class="badge badge-success">{{ jobTypeLabels[offer.jobType] }}</span>
+      </div>
+
+      <p class="offer-company">{{ offer.companyName }}</p>
+      <p class="offer-description">{{ offer.description }}</p>
+
+      <div class="offer-meta">
+        <span class="meta-item">📍 {{ offer.location }}</span>
+        <span class="meta-item">🎯 {{ experienceLabels[offer.experienceLevel] }}</span>
+        @if (offer.salary) {
+          <span class="meta-item">💰 {{ offer.salary }} DT</span>
+        }
+      </div>
+
+      <button class="btn btn-primary btn-full mt-1">Voir l'offre</button>
+    </div>
+  }
+</div>

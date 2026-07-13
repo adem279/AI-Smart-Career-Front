@@ -1,0 +1,61 @@
+<div class="app-shell">
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      Smart<span>Career</span>
+    </div>
+
+    <nav class="sidebar-nav">
+      @if (isCandidate) {
+        <a routerLink="/dashboard" routerLinkActive="active" class="nav-link">
+          <span class="nav-icon">🏠</span> Tableau de bord
+        </a>
+        <a routerLink="/job-offers" routerLinkActive="active" class="nav-link">
+          <span class="nav-icon">💼</span> Offres d'emploi
+        </a>
+        <a routerLink="/my-applications" routerLinkActive="active" class="nav-link">
+          <span class="nav-icon">📄</span> Mes candidatures
+        </a>
+        <a routerLink="/profile" routerLinkActive="active" class="nav-link">
+          <span class="nav-icon">👤</span> Mon profil
+        </a>
+      }
+
+      @if (isCompany) {
+        <a routerLink="/dashboard" routerLinkActive="active" class="nav-link">
+          <span class="nav-icon">🏠</span> Tableau de bord
+        </a>
+        <a routerLink="/my-job-offers" routerLinkActive="active" class="nav-link">
+          <span class="nav-icon">💼</span> Mes offres
+        </a>
+        <a routerLink="/company-profile" routerLinkActive="active" class="nav-link">
+          <span class="nav-icon">🏢</span> Profil entreprise
+        </a>
+      }
+
+      <a routerLink="/notifications" routerLinkActive="active" class="nav-link">
+        <span class="nav-icon">🔔</span> Notifications
+      </a>
+    </nav>
+
+    <button class="logout-btn" (click)="logout()">
+      <span class="nav-icon">🚪</span> Déconnexion
+    </button>
+  </aside>
+
+  <div class="main-area">
+    <header class="topbar">
+      <div class="topbar-badge">
+        @if (isCandidate) {
+          <span class="badge badge-neutral">Espace Candidat</span>
+        }
+        @if (isCompany) {
+          <span class="badge badge-neutral">Espace Entreprise</span>
+        }
+      </div>
+    </header>
+
+    <main class="content">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+</div>

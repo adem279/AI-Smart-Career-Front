@@ -1,0 +1,83 @@
+<div class="auth-page">
+  <div class="auth-card card">
+    <div class="auth-header">
+      <div class="logo">Smart<span>Career</span></div>
+      <h2>Créer un compte</h2>
+      <p>Rejoignez SmartCareer en quelques secondes</p>
+    </div>
+
+    <div class="type-switch">
+      <button
+        type="button"
+        class="type-btn"
+        [class.active]="accountType === 'CANDIDATE'"
+        (click)="setAccountType('CANDIDATE')">
+        👤 Candidat
+      </button>
+      <button
+        type="button"
+        class="type-btn"
+        [class.active]="accountType === 'COMPANY'"
+        (click)="setAccountType('COMPANY')">
+        🏢 Entreprise
+      </button>
+    </div>
+
+    <form (ngSubmit)="onSubmit()">
+      @if (errorMessage) {
+        <div class="error-message">{{ errorMessage }}</div>
+      }
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="firstName">
+            {{ accountType === 'COMPANY' ? 'Prénom (contact)' : 'Prénom' }}
+          </label>
+          <input type="text" id="firstName" name="firstName" [(ngModel)]="firstName" required>
+        </div>
+
+        <div class="form-group">
+          <label for="lastName">
+            {{ accountType === 'COMPANY' ? 'Nom (contact)' : 'Nom' }}
+          </label>
+          <input type="text" id="lastName" name="lastName" [(ngModel)]="lastName" required>
+        </div>
+      </div>
+
+      @if (accountType === 'COMPANY') {
+        <div class="form-group">
+          <label for="companyName">Nom de l'entreprise</label>
+          <input type="text" id="companyName" name="companyName" [(ngModel)]="companyName" required>
+        </div>
+
+        <div class="form-group">
+          <label for="sector">Secteur d'activité</label>
+          <input type="text" id="sector" name="sector" [(ngModel)]="sector" placeholder="ex: IT, Finance...">
+        </div>
+      }
+
+      <div class="form-group">
+        <label for="email">Adresse email</label>
+        <input type="email" id="email" name="email" [(ngModel)]="email" placeholder="vous@exemple.com" required>
+      </div>
+
+      <div class="form-group">
+        <label for="password">Mot de passe</label>
+        <input type="password" id="password" name="password" [(ngModel)]="password" placeholder="6 caractères minimum" required minlength="6">
+      </div>
+
+      <div class="form-group">
+        <label for="phone">Téléphone</label>
+        <input type="tel" id="phone" name="phone" [(ngModel)]="phone" placeholder="Optionnel">
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-full" [disabled]="isLoading">
+        {{ isLoading ? 'Création en cours...' : 'Créer mon compte' }}
+      </button>
+    </form>
+
+    <p class="auth-footer">
+      Déjà un compte ? <a routerLink="/login">Se connecter</a>
+    </p>
+  </div>
+</div>

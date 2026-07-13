@@ -1,21 +1,31 @@
-<div class="login-container">
-  <h2>Connexion</h2>
-
-  <form (ngSubmit)="onSubmit()">
-    <div class="form-group">
-      <label for="email">Email</label>
-      <input type="email" id="email" name="email" [(ngModel)]="email" required>
+<div class="auth-page">
+  <div class="auth-card card">
+    <div class="auth-header">
+      <div class="logo">Smart<span>Career</span></div>
+      <h2>Connexion</h2>
+      <p>Accédez à votre espace personnel</p>
     </div>
 
-    <div class="form-group">
-      <label for="password">Mot de passe</label>
-      <input type="password" id="password" name="password" [(ngModel)]="password" required>
-    </div>
+    <form (ngSubmit)="onSubmit()">
+      @if (errorMessage) {
+        <div class="error-message">{{ errorMessage }}</div>
+      }
 
-    @if (errorMessage) {
-      <p class="error">{{ errorMessage }}</p>
-    }
+      <div class="form-group">
+        <label for="email">Adresse email</label>
+        <input type="email" id="email" name="email" [(ngModel)]="email" placeholder="vous@exemple.com" required>
+      </div>
 
-    <button type="submit">Se connecter</button>
-  </form>
+      <div class="form-group">
+        <label for="password">Mot de passe</label>
+        <input type="password" id="password" name="password" [(ngModel)]="password" placeholder="••••••••" required>
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-full">Se connecter</button>
+    </form>
+
+    <p class="auth-footer">
+      Pas encore de compte ? <a routerLink="/register">Créer un compte</a>
+    </p>
+  </div>
 </div>
