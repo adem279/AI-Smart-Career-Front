@@ -6,51 +6,94 @@
 @if (isLoading()) {
   <p class="text-muted">Chargement...</p>
 } @else {
-  <div class="stats-grid">
-    <div class="stat-card card-flat">
-      <span class="stat-number">{{ applications().length }}</span>
-      <span class="stat-label">Candidatures envoyées</span>
-    </div>
 
-    <div class="stat-card card-flat">
-      <span class="stat-number stat-pending">{{ pendingCount }}</span>
-      <span class="stat-label">En attente</span>
-    </div>
-
-    <div class="stat-card card-flat">
-      <span class="stat-number stat-accepted">{{ acceptedCount }}</span>
-      <span class="stat-label">Acceptées</span>
-    </div>
-
-    <div class="stat-card card-flat">
-      <span class="stat-number stat-rejected">{{ rejectedCount }}</span>
-      <span class="stat-label">Refusées</span>
-    </div>
-  </div>
-
-  <div class="quick-actions">
-    <a routerLink="/job-offers" class="action-card card">
-      <span class="action-icon">💼</span>
-      <div>
-        <h3>Découvrir des offres</h3>
-        <p>Parcourez les opportunités disponibles</p>
+  @if (isCandidate) {
+    <div class="stats-grid">
+      <div class="stat-card card-flat">
+        <span class="stat-number">{{ applications().length }}</span>
+        <span class="stat-label">Candidatures envoyées</span>
       </div>
-    </a>
-
-    <a routerLink="/my-applications" class="action-card card">
-      <span class="action-icon">📄</span>
-      <div>
-        <h3>Suivre mes candidatures</h3>
-        <p>Consultez l'état de vos candidatures</p>
+      <div class="stat-card card-flat">
+        <span class="stat-number stat-pending">{{ pendingCount }}</span>
+        <span class="stat-label">En attente</span>
       </div>
-    </a>
-
-    <a routerLink="/profile" class="action-card card">
-      <span class="action-icon">👤</span>
-      <div>
-        <h3>Compléter mon profil</h3>
-        <p>Ajoutez vos compétences et expériences</p>
+      <div class="stat-card card-flat">
+        <span class="stat-number stat-accepted">{{ acceptedCount }}</span>
+        <span class="stat-label">Acceptées</span>
       </div>
-    </a>
-  </div>
+      <div class="stat-card card-flat">
+        <span class="stat-number stat-rejected">{{ rejectedCount }}</span>
+        <span class="stat-label">Refusées</span>
+      </div>
+    </div>
+
+    <div class="quick-actions">
+      <a routerLink="/job-offers" class="action-card card">
+        <span class="action-icon">💼</span>
+        <div>
+          <h3>Découvrir des offres</h3>
+          <p>Parcourez les opportunités disponibles</p>
+        </div>
+      </a>
+
+      <a routerLink="/my-applications" class="action-card card">
+        <span class="action-icon">📄</span>
+        <div>
+          <h3>Suivre mes candidatures</h3>
+          <p>Consultez l'état de vos candidatures</p>
+        </div>
+      </a>
+
+      <a routerLink="/profile" class="action-card card">
+        <span class="action-icon">👤</span>
+        <div>
+          <h3>Compléter mon profil</h3>
+          <p>Ajoutez vos compétences et expériences</p>
+        </div>
+      </a>
+    </div>
+  }
+
+  @if (isCompany) {
+    <div class="stats-grid">
+      <div class="stat-card card-flat">
+        <span class="stat-number">{{ jobOffers().length }}</span>
+        <span class="stat-label">Offres publiées</span>
+      </div>
+      <div class="stat-card card-flat">
+        <span class="stat-number stat-accepted">{{ openOffersCount }}</span>
+        <span class="stat-label">Offres ouvertes</span>
+      </div>
+      <div class="stat-card card-flat">
+        <span class="stat-number stat-rejected">{{ closedOffersCount }}</span>
+        <span class="stat-label">Offres fermées</span>
+      </div>
+    </div>
+
+    <div class="quick-actions">
+      <a routerLink="/my-job-offers/new" class="action-card card">
+        <span class="action-icon">➕</span>
+        <div>
+          <h3>Publier une offre</h3>
+          <p>Créez une nouvelle offre d'emploi</p>
+        </div>
+      </a>
+
+      <a routerLink="/my-job-offers" class="action-card card">
+        <span class="action-icon">💼</span>
+        <div>
+          <h3>Gérer mes offres</h3>
+          <p>Consultez et modifiez vos offres publiées</p>
+        </div>
+      </a>
+
+      <a routerLink="/company-profile" class="action-card card">
+        <span class="action-icon">🏢</span>
+        <div>
+          <h3>Profil entreprise</h3>
+          <p>Mettez à jour vos informations</p>
+        </div>
+      </a>
+    </div>
+  }
 }
