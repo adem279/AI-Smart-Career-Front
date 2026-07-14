@@ -1,0 +1,65 @@
+<div class="page-header">
+  <h1>{{ isEditMode() ? 'Modifier l\'offre' : 'Nouvelle offre d\'emploi' }}</h1>
+</div>
+
+<div class="form-card card">
+  @if (errorMessage()) {
+    <div class="error-message">{{ errorMessage() }}</div>
+  }
+
+  <form (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <label for="title">Titre du poste</label>
+      <input type="text" id="title" name="title" [(ngModel)]="title" required>
+    </div>
+
+    <div class="form-group">
+      <label for="description">Description</label>
+      <textarea id="description" name="description" [(ngModel)]="description" rows="5" required></textarea>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label for="location">Localisation</label>
+        <input type="text" id="location" name="location" [(ngModel)]="location" required>
+      </div>
+
+      <div class="form-group">
+        <label for="salary">Salaire (DT)</label>
+        <input type="number" id="salary" name="salary" [(ngModel)]="salary">
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label for="jobType">Type de contrat</label>
+        <select id="jobType" name="jobType" [(ngModel)]="jobType">
+          @for (type of jobTypeOptions; track type) {
+            <option [value]="type">{{ jobTypeLabels[type] }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="experienceLevel">Niveau d'expérience</label>
+        <select id="experienceLevel" name="experienceLevel" [(ngModel)]="experienceLevel">
+          @for (level of experienceLevelOptions; track level) {
+            <option [value]="level">{{ experienceLabels[level] }}</option>
+          }
+        </select>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="deadline">Date limite de candidature</label>
+      <input type="date" id="deadline" name="deadline" [(ngModel)]="deadline" required>
+    </div>
+
+    <div class="form-actions">
+      <button type="button" class="btn btn-secondary" (click)="cancel()">Annuler</button>
+      <button type="submit" class="btn btn-primary" [disabled]="isSaving()">
+        {{ isSaving() ? 'Enregistrement...' : (isEditMode() ? 'Enregistrer' : 'Publier l\'offre') }}
+      </button>
+    </div>
+  </form>
+</div>

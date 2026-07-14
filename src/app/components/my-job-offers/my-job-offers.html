@@ -1,0 +1,59 @@
+<div class="page-header">
+  <div>
+    <h1>Mes offres d'emploi</h1>
+    <p>Gérez vos offres publiées</p>
+  </div>
+  <button class="btn btn-primary" (click)="createOffer()">+ Nouvelle offre</button>
+</div>
+
+@if (isLoading()) {
+  <p class="text-muted">Chargement...</p>
+}
+
+@if (errorMessage()) {
+  <div class="error-message">{{ errorMessage() }}</div>
+}
+
+@if (!isLoading() && jobOffers().length === 0 && !errorMessage()) {
+  <div class="empty-state card">
+    <p>Vous n'avez pas encore publié d'offre.</p>
+    <button class="btn btn-primary mt-1" (click)="createOffer()">Créer ma première offre</button>
+  </div>
+}
+
+<div class="offers-list">
+  @for (offer of jobOffers(); track offer.id) {
+    <div class="offer-row card-flat">
+      <div class="offer-info">
+        <div class="offer-title-row">
+          <h3>{{ offer.title }}</h3>
+          <span class="badge" [class]="statusBadgeClass[offer.status]">
+            {{ statusLabels[offer.status] }}
+          </span>
+        </div>
+        <p class="offer-meta-text">
+          {{ jobTypeLabels[offer.jobType] }} · {{ offer.location }} · Date limite {{ offer.deadline }}
+        </p>
+      </div>
+
+      <div class="offer-actions">
+        <button class="btn btn-secondary" (click)="viewApplications(offer.id)">Candidatures</button>
+        <button class="btn btn-secondary" (click)="editOffer(offer.id)">Modifier</button>
+        @if (offer.status === 'OPEN') {
+          <button
+            class="btn btn-secondary"
+            (click)="closeOffer(offer.id)"
+            [disabled]="closingId() === offer.id">
+            {{ closingId() === offer.id ? '...' : 'Fermer' }}
+          </button>
+        }
+        <button
+          class="btn btn-danger"
+          (click)="deleteOffer(offer.id)"
+          [disabled]="deletingId() === offer.id">
+          {{ deletingId() === offer.id ? '...' : 'Supprimer' }}
+        </button>
+      </div>
+    </div>
+  }
+</div>
