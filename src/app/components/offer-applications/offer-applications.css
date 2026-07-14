@@ -59,3 +59,42 @@
 .mt-1 {
   margin-top: var(--space-lg);
 }
+.interview-zone {
+  border-top: 1px solid var(--color-border);
+  padding-top: var(--space-md);
+  margin-top: var(--space-sm);
+}
+
+.interview-info h4 {
+  font-size: 0.9375rem;
+  margin-bottom: var(--space-xs);
+}
+
+.interview-info p {
+  font-size: 0.875rem;
+  margin-bottom: var(--space-sm);
+}
+
+.result-actions {
+  display: flex;
+  gap: var(--space-sm);
+  margin-top: var(--space-sm);
+}
+
+.schedule-form {
+  background: var(--color-bg);
+  padding: var(--space-md);
+  border-radius: var(--radius-sm);
+}
+
+.schedule-actions {
+  display: flex;
+  gap: var(--space-sm);
+  justify-content: flex-end;
+  margin-top: var(--space-md);
+}
+
+.btn-sm {
+  padding: 0.5rem 1rem;
+  font-size: 0.8125rem;
+}

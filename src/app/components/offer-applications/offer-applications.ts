@@ -1,23 +1,33 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ApplicationService } from '../../services/application';
 import { JobOfferService } from '../../services/job-offer';
+import { InterviewService } from '../../services/interview';
 import { Application } from '../../models/application.model';
 import { JobOffer } from '../../models/job-offer.model';
+import { Interview, InterviewRequest } from '../../models/interview.model';
 
 @Component({
   selector: 'app-offer-applications',
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './offer-applications.html',
   styleUrl: './offer-applications.css'
 })
 export class OfferApplications implements OnInit {
   jobOffer = signal<JobOffer | null>(null);
   applications = signal<Application[]>([]);
+  interviews = signal<Record<number, Interview | null>>({});
   isLoading = signal(true);
   errorMessage = signal('');
   processingId = signal<number | null>(null);
+
+  schedulingForAppId = signal<number | null>(null);
+  interviewDate = '';
+  interviewTime = '';
+  interviewLocation = '';
+  interviewType = 'Présentiel';
 
   statusLabels: Record<string, string> = {
     PENDING: 'En attente',
@@ -37,7 +47,8 @@ export class OfferApplications implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private applicationService: ApplicationService,
-    private jobOfferService: JobOfferService
+    private jobOfferService: JobOfferService,
+    private interviewService: InterviewService
   ) {}
 
   ngOnInit(): void {
@@ -59,6 +70,7 @@ export class OfferApplications implements OnInit {
       next: (apps) => {
         this.applications.set(apps);
         this.isLoading.set(false);
+        this.loadInterviewsForAccepted(apps);
       },
       error: (err) => {
         console.error('Erreur chargement candidatures', err);
@@ -68,11 +80,26 @@ export class OfferApplications implements OnInit {
     });
   }
 
+  loadInterviewsForAccepted(apps: Application[]): void {
+    const accepted = apps.filter(a => a.status === 'ACCEPTED');
+    accepted.forEach(app => {
+      this.interviewService.getByApplicationId(app.id).subscribe({
+        next: (interview) => {
+          this.interviews.update(map => ({ ...map, [app.id]: interview }));
+        },
+        error: () => {
+          this.interviews.update(map => ({ ...map, [app.id]: null }));
+        }
+      });
+    });
+  }
+
   accept(id: number): void {
     this.processingId.set(id);
     this.applicationService.accept(id).subscribe({
       next: (updated) => {
         this.applications.update(apps => apps.map(a => a.id === updated.id ? updated : a));
+        this.interviews.update(map => ({ ...map, [updated.id]: null }));
         this.processingId.set(null);
       },
       error: (err) => {
@@ -93,6 +120,53 @@ export class OfferApplications implements OnInit {
         console.error('Erreur refus', err);
         this.processingId.set(null);
       }
+    });
+  }
+
+  openScheduleForm(applicationId: number): void {
+    this.schedulingForAppId.set(applicationId);
+    this.interviewDate = '';
+    this.interviewTime = '';
+    this.interviewLocation = '';
+    this.interviewType = 'Présentiel';
+  }
+
+  cancelScheduleForm(): void {
+    this.schedulingForAppId.set(null);
+  }
+
+  confirmSchedule(applicationId: number): void {
+    const request: InterviewRequest = {
+      date: this.interviewDate,
+      time: this.interviewTime,
+      location: this.interviewLocation,
+      type: this.interviewType
+    };
+
+    this.interviewService.schedule(applicationId, request).subscribe({
+      next: (interview) => {
+        this.interviews.update(map => ({ ...map, [applicationId]: interview }));
+        this.schedulingForAppId.set(null);
+      },
+      error: (err) => console.error('Erreur planification entretien', err)
+    });
+  }
+
+  setResult(applicationId: number, interviewId: number, result: string): void {
+    this.interviewService.setResult(interviewId, result).subscribe({
+      next: (updated) => {
+        this.interviews.update(map => ({ ...map, [applicationId]: updated }));
+      },
+      error: (err) => console.error('Erreur mise à jour résultat', err)
+    });
+  }
+
+  cancelInterview(applicationId: number, interviewId: number): void {
+    this.interviewService.cancel(interviewId).subscribe({
+      next: () => {
+        this.interviews.update(map => ({ ...map, [applicationId]: null }));
+      },
+      error: (err) => console.error('Erreur annulation entretien', err)
     });
   }
 
