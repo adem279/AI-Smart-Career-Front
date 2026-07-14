@@ -1,0 +1,47 @@
+<div class="page-header">
+  <h1>Mes candidatures</h1>
+  <p>Suivez l'état de vos candidatures en temps réel</p>
+</div>
+
+@if (isLoading()) {
+  <p class="text-muted">Chargement...</p>
+}
+
+@if (errorMessage()) {
+  <div class="error-message">{{ errorMessage() }}</div>
+}
+
+@if (!isLoading() && applications().length === 0 && !errorMessage()) {
+  <div class="empty-state card">
+    <p>Vous n'avez pas encore postulé à une offre.</p>
+  </div>
+}
+
+<div class="applications-list">
+  @for (app of applications(); track app.id) {
+    <div class="application-card card-flat">
+      <div class="application-header">
+        <div>
+          <h3>{{ app.jobOfferTitle }}</h3>
+          <p class="application-date">Postulé le {{ app.applicationDate | date:'dd/MM/yyyy à HH:mm' }}</p>
+        </div>
+        <span class="badge" [class]="statusBadgeClass[app.status]">
+          {{ statusLabels[app.status] }}
+        </span>
+      </div>
+
+      @if (app.message) {
+        <p class="application-message">"{{ app.message }}"</p>
+      }
+
+      @if (app.status === 'PENDING') {
+        <button
+          class="btn btn-danger"
+          (click)="withdraw(app.id)"
+          [disabled]="withdrawingId() === app.id">
+          {{ withdrawingId() === app.id ? 'Retrait en cours...' : 'Retirer ma candidature' }}
+        </button>
+      }
+    </div>
+  }
+</div>

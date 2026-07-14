@@ -1,5 +1,6 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 import { JobOfferService } from '../../services/job-offer';
 import { JobOffer } from '../../models/job-offer.model';
 
@@ -27,7 +28,7 @@ export class JobOffersList implements OnInit {
     SENIOR: 'Senior'
   };
 
-  constructor(private jobOfferService: JobOfferService) {}
+  constructor(private jobOfferService: JobOfferService, private router: Router) {}
 
   ngOnInit(): void {
     this.loadJobOffers();
@@ -46,5 +47,9 @@ export class JobOffersList implements OnInit {
         this.isLoading.set(false);
       }
     });
+  }
+
+  viewOffer(id: number): void {
+    this.router.navigate(['/job-offers', id]);
   }
 }

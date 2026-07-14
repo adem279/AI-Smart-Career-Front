@@ -1,0 +1,93 @@
+<div class="page-header">
+  <h1>Mon profil</h1>
+  <p>Gérez vos informations personnelles</p>
+</div>
+
+@if (isLoading()) {
+  <p class="text-muted">Chargement...</p>
+}
+
+@if (errorMessage()) {
+  <div class="error-message">{{ errorMessage() }}</div>
+}
+
+@if (candidate(); as candidate) {
+  <div class="profile-card card">
+    @if (successMessage()) {
+      <div class="success-box mb-1">{{ successMessage() }}</div>
+    }
+
+    <div class="profile-header">
+      <div class="avatar">{{ candidate.firstName[0] }}{{ candidate.lastName[0] }}</div>
+      <div>
+        <h2>{{ candidate.firstName }} {{ candidate.lastName }}</h2>
+        <p>{{ candidate.email }}</p>
+      </div>
+
+      @if (!isEditing()) {
+        <button class="btn btn-secondary edit-btn" (click)="startEditing()">✏️ Modifier</button>
+      }
+    </div>
+
+    @if (!isEditing()) {
+      <div class="profile-info">
+        <div class="info-row">
+          <span class="info-label">Téléphone</span>
+          <span class="info-value">{{ candidate.phone || 'Non renseigné' }}</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Adresse</span>
+          <span class="info-value">{{ candidate.address || 'Non renseignée' }}</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Date de naissance</span>
+          <span class="info-value">{{ candidate.birthDate || 'Non renseignée' }}</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Bio</span>
+          <span class="info-value">{{ candidate.bio || 'Aucune bio renseignée' }}</span>
+        </div>
+      </div>
+    } @else {
+      <form (ngSubmit)="onSave()" class="edit-form">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="firstName">Prénom</label>
+            <input type="text" id="firstName" name="firstName" [(ngModel)]="firstName" required>
+          </div>
+          <div class="form-group">
+            <label for="lastName">Nom</label>
+            <input type="text" id="lastName" name="lastName" [(ngModel)]="lastName" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="phone">Téléphone</label>
+          <input type="tel" id="phone" name="phone" [(ngModel)]="phone">
+        </div>
+
+        <div class="form-group">
+          <label for="address">Adresse</label>
+          <input type="text" id="address" name="address" [(ngModel)]="address">
+        </div>
+
+        <div class="form-group">
+          <label for="birthDate">Date de naissance</label>
+          <input type="date" id="birthDate" name="birthDate" [(ngModel)]="birthDate">
+        </div>
+
+        <div class="form-group">
+          <label for="bio">Bio</label>
+          <textarea id="bio" name="bio" [(ngModel)]="bio" rows="4" placeholder="Parlez un peu de vous..."></textarea>
+        </div>
+
+        <div class="edit-actions">
+          <button type="button" class="btn btn-secondary" (click)="cancelEditing()">Annuler</button>
+          <button type="submit" class="btn btn-primary" [disabled]="isSaving()">
+            {{ isSaving() ? 'Enregistrement...' : 'Enregistrer' }}
+          </button>
+        </div>
+      </form>
+    }
+  </div>
+}

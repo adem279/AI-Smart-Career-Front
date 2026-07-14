@@ -1,0 +1,40 @@
+<div class="page-header">
+  <h1>Notifications</h1>
+  <p>Restez informé de l'évolution de vos candidatures</p>
+</div>
+
+@if (isLoading()) {
+  <p class="text-muted">Chargement...</p>
+}
+
+@if (errorMessage()) {
+  <div class="error-message">{{ errorMessage() }}</div>
+}
+
+@if (!isLoading() && notifications().length === 0 && !errorMessage()) {
+  <div class="empty-state card">
+    <p>Vous n'avez aucune notification pour le moment.</p>
+  </div>
+}
+
+<div class="notifications-list">
+  @for (notif of notifications(); track notif.id) {
+    <div
+      class="notification-card card-flat"
+      [class.unread]="!notif.isRead"
+      (click)="markAsRead(notif)">
+
+      @if (!notif.isRead) {
+        <span class="unread-dot"></span>
+      }
+
+      <div class="notification-content">
+        <h3>{{ notif.title }}</h3>
+        <p>{{ notif.message }}</p>
+        <span class="notification-date">{{ notif.createdAt | date:'dd/MM/yyyy à HH:mm' }}</span>
+      </div>
+
+      <button class="delete-btn" (click)="delete(notif.id, $event)" title="Supprimer">✕</button>
+    </div>
+  }
+</div>

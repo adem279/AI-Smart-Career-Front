@@ -1,2 +1,56 @@
-<h1>Dashboard</h1>
-<p>Connexion réussie ! 🎉</p>
+<div class="page-header">
+  <h1>Tableau de bord</h1>
+  <p>Bienvenue sur votre espace SmartCareer</p>
+</div>
+
+@if (isLoading()) {
+  <p class="text-muted">Chargement...</p>
+} @else {
+  <div class="stats-grid">
+    <div class="stat-card card-flat">
+      <span class="stat-number">{{ applications().length }}</span>
+      <span class="stat-label">Candidatures envoyées</span>
+    </div>
+
+    <div class="stat-card card-flat">
+      <span class="stat-number stat-pending">{{ pendingCount }}</span>
+      <span class="stat-label">En attente</span>
+    </div>
+
+    <div class="stat-card card-flat">
+      <span class="stat-number stat-accepted">{{ acceptedCount }}</span>
+      <span class="stat-label">Acceptées</span>
+    </div>
+
+    <div class="stat-card card-flat">
+      <span class="stat-number stat-rejected">{{ rejectedCount }}</span>
+      <span class="stat-label">Refusées</span>
+    </div>
+  </div>
+
+  <div class="quick-actions">
+    <a routerLink="/job-offers" class="action-card card">
+      <span class="action-icon">💼</span>
+      <div>
+        <h3>Découvrir des offres</h3>
+        <p>Parcourez les opportunités disponibles</p>
+      </div>
+    </a>
+
+    <a routerLink="/my-applications" class="action-card card">
+      <span class="action-icon">📄</span>
+      <div>
+        <h3>Suivre mes candidatures</h3>
+        <p>Consultez l'état de vos candidatures</p>
+      </div>
+    </a>
+
+    <a routerLink="/profile" class="action-card card">
+      <span class="action-icon">👤</span>
+      <div>
+        <h3>Compléter mon profil</h3>
+        <p>Ajoutez vos compétences et expériences</p>
+      </div>
+    </a>
+  </div>
+}

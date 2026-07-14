@@ -1,0 +1,64 @@
+@if (isLoading()) {
+  <p class="text-muted">Chargement...</p>
+}
+
+@if (errorMessage()) {
+  <div class="error-message">{{ errorMessage() }}</div>
+}
+
+@if (jobOffer(); as offer) {
+  <button class="btn btn-secondary" (click)="goBack()">← Retour aux offres</button>
+
+  <div class="detail-card card mt-1">
+    <div class="detail-header">
+      <div>
+        <h1>{{ offer.title }}</h1>
+        <p class="detail-company">{{ offer.companyName }}</p>
+      </div>
+      <span class="badge badge-success">{{ jobTypeLabels[offer.jobType] }}</span>
+    </div>
+
+    <div class="detail-meta">
+      <span class="meta-item">📍 {{ offer.location }}</span>
+      <span class="meta-item">🎯 {{ experienceLabels[offer.experienceLevel] }}</span>
+      @if (offer.salary) {
+        <span class="meta-item">💰 {{ offer.salary }} DT</span>
+      }
+      <span class="meta-item">📅 Date limite : {{ offer.deadline }}</span>
+    </div>
+
+    <div class="detail-section">
+      <h3>Description du poste</h3>
+      <p>{{ offer.description }}</p>
+    </div>
+
+    <div class="apply-section">
+      @if (applySuccess()) {
+        <div class="success-box">
+          ✅ Votre candidature a été envoyée avec succès !
+        </div>
+      } @else {
+        <h3>Postuler à cette offre</h3>
+
+        @if (applyError()) {
+          <div class="error-message">{{ applyError() }}</div>
+        }
+
+        <div class="form-group">
+          <label for="message">Message de motivation</label>
+          <textarea
+            id="message"
+            name="message"
+            [(ngModel)]="message"
+            placeholder="Expliquez pourquoi vous êtes le candidat idéal pour ce poste..."
+            rows="5">
+          </textarea>
+        </div>
+
+        <button class="btn btn-primary" (click)="onApply()" [disabled]="isApplying()">
+          {{ isApplying() ? 'Envoi en cours...' : 'Envoyer ma candidature' }}
+        </button>
+      }
+    </div>
+  </div>
+}

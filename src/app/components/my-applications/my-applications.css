@@ -1,0 +1,52 @@
+.page-header {
+  margin-bottom: var(--space-xl);
+}
+
+.page-header h1 {
+  font-size: 1.75rem;
+  margin-bottom: var(--space-xs);
+}
+
+.applications-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  max-width: 700px;
+}
+
+.application-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.application-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--space-md);
+}
+
+.application-header h3 {
+  font-size: 1.0625rem;
+  margin-bottom: var(--space-xs);
+}
+
+.application-date {
+  font-size: 0.8125rem;
+}
+
+.application-message {
+  font-size: 0.875rem;
+  font-style: italic;
+  color: var(--color-text-muted);
+  background: var(--color-bg);
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--radius-sm);
+}
+
+.empty-state {
+  text-align: center;
+  padding: var(--space-2xl);
+  max-width: 700px;
+}
