@@ -45,6 +45,14 @@
         }
 
         <div class="form-group">
+          <label for="resume">Votre CV (PDF ou Word)</label>
+          <input type="file" id="resume" accept=".pdf,.doc,.docx" (change)="onFileSelected($event)">
+          @if (selectedFileName()) {
+            <p class="file-selected">📎 {{ selectedFileName() }}</p>
+          }
+        </div>
+
+        <div class="form-group">
           <label for="message">Message de motivation</label>
           <textarea
             id="message"

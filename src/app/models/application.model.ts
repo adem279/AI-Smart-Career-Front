@@ -9,9 +9,13 @@ export interface Application {
   candidateName: string;
   jobOfferId: number;
   jobOfferTitle: string;
+  resumeId: number | null;
+  resumeFileName: string | null;
+  resumeFilePath: string | null;
 }
 
 export interface ApplicationRequest {
   jobOfferId: number;
   message: string;
+  resumeId: number | null;
 }

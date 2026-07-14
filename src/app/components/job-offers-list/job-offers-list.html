@@ -3,6 +3,47 @@
   <p>Découvrez les opportunités qui vous correspondent</p>
 </div>
 
+<div class="filters-bar card-flat">
+  <input
+    type="text"
+    class="search-input"
+    placeholder="🔍 Rechercher par titre, entreprise, mot-clé..."
+    [ngModel]="searchText()"
+    (ngModelChange)="searchText.set($event)">
+
+  <div class="filters-row">
+    <select [ngModel]="filterLocation()" (ngModelChange)="filterLocation.set($event)">
+      <option value="">📍 Toutes les localisations</option>
+      @for (loc of availableLocations(); track loc) {
+        <option [value]="loc">{{ loc }}</option>
+      }
+    </select>
+
+    <select [ngModel]="filterJobType()" (ngModelChange)="filterJobType.set($event)">
+      <option value="">💼 Tous les types</option>
+      <option value="FULL_TIME">Temps plein</option>
+      <option value="PART_TIME">Temps partiel</option>
+      <option value="INTERNSHIP">Stage</option>
+      <option value="FREELANCE">Freelance</option>
+    </select>
+
+    <select [ngModel]="filterExperienceLevel()" (ngModelChange)="filterExperienceLevel.set($event)">
+      <option value="">🎯 Tous niveaux</option>
+      <option value="JUNIOR">Junior</option>
+      <option value="MID_LEVEL">Intermédiaire</option>
+      <option value="SENIOR">Senior</option>
+    </select>
+
+    <input
+      type="number"
+      placeholder="💰 Salaire min (DT)"
+      [ngModel]="filterMinSalary()"
+      (ngModelChange)="filterMinSalary.set($event)">
+
+    <button class="btn btn-secondary" (click)="resetFilters()">✕ Réinitialiser</button>
+  </div>
+</div>
+
 @if (isLoading()) {
   <p class="text-muted">Chargement des offres...</p>
 }
@@ -11,14 +52,18 @@
   <div class="error-message">{{ errorMessage() }}</div>
 }
 
-@if (!isLoading() && jobOffers().length === 0 && !errorMessage()) {
+@if (!isLoading() && !errorMessage()) {
+  <p class="results-count">{{ filteredOffers().length }} offre(s) trouvée(s)</p>
+}
+
+@if (!isLoading() && filteredOffers().length === 0 && !errorMessage()) {
   <div class="empty-state card">
-    <p>Aucune offre disponible pour le moment.</p>
+    <p>Aucune offre ne correspond à vos critères.</p>
   </div>
 }
 
 <div class="offers-grid">
-  @for (offer of jobOffers(); track offer.id) {
+  @for (offer of filteredOffers(); track offer.id) {
     <div class="offer-card card-flat">
       <div class="offer-card-header">
         <h3>{{ offer.title }}</h3>
@@ -36,7 +81,11 @@
         }
       </div>
 
-      <button class="btn btn-primary btn-full mt-1" (click)="viewOffer(offer.id)">Voir l'offre</button>
+      @if (isCandidate() && hasApplied(offer.id)) {
+  <button class="btn btn-secondary btn-full mt-1" disabled>✓ Déjà postulé</button>
+} @else {
+  <button class="btn btn-primary btn-full mt-1" (click)="viewOffer(offer.id)">Voir l'offre</button>
+}
     </div>
   }
 </div>

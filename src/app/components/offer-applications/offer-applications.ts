@@ -5,9 +5,11 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ApplicationService } from '../../services/application';
 import { JobOfferService } from '../../services/job-offer';
 import { InterviewService } from '../../services/interview';
+import { ReviewService } from '../../services/review';
 import { Application } from '../../models/application.model';
 import { JobOffer } from '../../models/job-offer.model';
 import { Interview, InterviewRequest } from '../../models/interview.model';
+import { Review } from '../../models/review.model';
 
 @Component({
   selector: 'app-offer-applications',
@@ -19,6 +21,7 @@ export class OfferApplications implements OnInit {
   jobOffer = signal<JobOffer | null>(null);
   applications = signal<Application[]>([]);
   interviews = signal<Record<number, Interview | null>>({});
+  reviewsByCandidate = signal<Record<number, Review | null>>({});
   isLoading = signal(true);
   errorMessage = signal('');
   processingId = signal<number | null>(null);
@@ -28,6 +31,10 @@ export class OfferApplications implements OnInit {
   interviewTime = '';
   interviewLocation = '';
   interviewType = 'Présentiel';
+
+  reviewingForCandidateId = signal<number | null>(null);
+  reviewRating = 5;
+  reviewComment = '';
 
   statusLabels: Record<string, string> = {
     PENDING: 'En attente',
@@ -41,6 +48,8 @@ export class OfferApplications implements OnInit {
     REJECTED: 'badge-danger'
   };
 
+  ratingOptions = [1, 2, 3, 4, 5];
+
   private offerId!: number;
 
   constructor(
@@ -48,13 +57,15 @@ export class OfferApplications implements OnInit {
     private router: Router,
     private applicationService: ApplicationService,
     private jobOfferService: JobOfferService,
-    private interviewService: InterviewService
+    private interviewService: InterviewService,
+    private reviewService: ReviewService
   ) {}
 
   ngOnInit(): void {
     this.offerId = Number(this.route.snapshot.paramMap.get('id'));
     this.loadOffer();
     this.loadApplications();
+    this.loadMyReviews();
   }
 
   loadOffer(): void {
@@ -91,6 +102,17 @@ export class OfferApplications implements OnInit {
           this.interviews.update(map => ({ ...map, [app.id]: null }));
         }
       });
+    });
+  }
+
+  loadMyReviews(): void {
+    this.reviewService.getMyReviewsWritten().subscribe({
+      next: (reviews) => {
+        const map: Record<number, Review> = {};
+        reviews.forEach(r => map[r.candidateId] = r);
+        this.reviewsByCandidate.set(map);
+      },
+      error: (err) => console.error('Erreur chargement avis', err)
     });
   }
 
@@ -167,6 +189,30 @@ export class OfferApplications implements OnInit {
         this.interviews.update(map => ({ ...map, [applicationId]: null }));
       },
       error: (err) => console.error('Erreur annulation entretien', err)
+    });
+  }
+
+  openReviewForm(candidateId: number): void {
+    this.reviewingForCandidateId.set(candidateId);
+    this.reviewRating = 5;
+    this.reviewComment = '';
+  }
+
+  cancelReviewForm(): void {
+    this.reviewingForCandidateId.set(null);
+  }
+
+  confirmReview(candidateId: number): void {
+    this.reviewService.create({
+      candidateId,
+      rating: this.reviewRating,
+      comment: this.reviewComment
+    }).subscribe({
+      next: (review) => {
+        this.reviewsByCandidate.update(map => ({ ...map, [candidateId]: review }));
+        this.reviewingForCandidateId.set(null);
+      },
+      error: (err) => console.error('Erreur création avis', err)
     });
   }
 
