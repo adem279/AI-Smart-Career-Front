@@ -1,0 +1,59 @@
+<button class="btn btn-secondary" (click)="goBack()">← Retour à mes offres</button>
+
+@if (jobOffer(); as offer) {
+  <div class="page-header mt-1">
+    <h1>Candidatures pour "{{ offer.title }}"</h1>
+    <p>{{ applications().length }} candidature(s) reçue(s)</p>
+  </div>
+}
+
+@if (isLoading()) {
+  <p class="text-muted">Chargement...</p>
+}
+
+@if (errorMessage()) {
+  <div class="error-message">{{ errorMessage() }}</div>
+}
+
+@if (!isLoading() && applications().length === 0 && !errorMessage()) {
+  <div class="empty-state card">
+    <p>Aucune candidature reçue pour cette offre pour le moment.</p>
+  </div>
+}
+
+<div class="applications-list">
+  @for (app of applications(); track app.id) {
+    <div class="application-card card-flat">
+      <div class="application-header">
+        <div>
+          <h3>{{ app.candidateName }}</h3>
+          <p class="application-date">Postulé le {{ app.applicationDate | date:'dd/MM/yyyy à HH:mm' }}</p>
+        </div>
+        <span class="badge" [class]="statusBadgeClass[app.status]">
+          {{ statusLabels[app.status] }}
+        </span>
+      </div>
+
+      @if (app.message) {
+        <p class="application-message">"{{ app.message }}"</p>
+      }
+
+      @if (app.status === 'PENDING') {
+        <div class="application-actions">
+          <button
+            class="btn btn-accent"
+            (click)="accept(app.id)"
+            [disabled]="processingId() === app.id">
+            ✓ Accepter
+          </button>
+          <button
+            class="btn btn-danger"
+            (click)="reject(app.id)"
+            [disabled]="processingId() === app.id">
+            ✕ Refuser
+          </button>
+        </div>
+      }
+    </div>
+  }
+</div>

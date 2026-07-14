@@ -20,6 +20,18 @@ export class ApplicationService {
     return this.http.get<Application[]>(`${this.apiUrl}/me`);
   }
 
+  getApplicationsForJobOffer(jobOfferId: number): Observable<Application[]> {
+    return this.http.get<Application[]>(`${this.apiUrl}/job-offer/${jobOfferId}`);
+  }
+
+  accept(id: number): Observable<Application> {
+    return this.http.patch<Application>(`${this.apiUrl}/${id}/accept`, {});
+  }
+
+  reject(id: number): Observable<Application> {
+    return this.http.patch<Application>(`${this.apiUrl}/${id}/reject`, {});
+  }
+
   withdraw(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
