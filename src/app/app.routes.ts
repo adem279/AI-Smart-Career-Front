@@ -10,6 +10,7 @@ import { Notifications } from './components/notifications/notifications';
 import { MyJobOffers } from './components/my-job-offers/my-job-offers';
 import { JobOfferForm } from './components/job-offer-form/job-offer-form';
 import { OfferApplications } from './components/offer-applications/offer-applications';
+import { CompanyProfile } from './components/company-profile/company-profile';
 import { Layout } from './components/layout/layout';
 import { authGuard } from './guards/auth-guard';
 
@@ -31,6 +32,7 @@ export const routes: Routes = [
       { path: 'my-job-offers/new', component: JobOfferForm },
       { path: 'my-job-offers/:id/edit', component: JobOfferForm },
       { path: 'my-job-offers/:id/applications', component: OfferApplications },
+      { path: 'company-profile', component: CompanyProfile },
     ]
   },
   { path: '', redirectTo: '/login', pathMatch: 'full' }
