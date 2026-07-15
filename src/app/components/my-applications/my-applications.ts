@@ -1,7 +1,10 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ApplicationService } from '../../services/application';
+import { InterviewService } from '../../services/interview';
 import { Application } from '../../models/application.model';
+import { Interview } from '../../models/interview.model';
+import { isInterviewPast } from '../../utils/interview.util';
 
 @Component({
   selector: 'app-my-applications',
@@ -11,6 +14,7 @@ import { Application } from '../../models/application.model';
 })
 export class MyApplications implements OnInit {
   applications = signal<Application[]>([]);
+  interviews = signal<Record<number, Interview | null>>({});
   isLoading = signal(true);
   errorMessage = signal('');
   withdrawingId = signal<number | null>(null);
@@ -27,7 +31,12 @@ export class MyApplications implements OnInit {
     REJECTED: 'badge-danger'
   };
 
-  constructor(private applicationService: ApplicationService) {}
+  isInterviewPast = isInterviewPast;
+
+  constructor(
+    private applicationService: ApplicationService,
+    private interviewService: InterviewService
+  ) {}
 
   ngOnInit(): void {
     this.loadApplications();
@@ -39,12 +48,27 @@ export class MyApplications implements OnInit {
       next: (apps) => {
         this.applications.set(apps);
         this.isLoading.set(false);
+        this.loadInterviewsForAccepted(apps);
       },
       error: (err) => {
         console.error('Erreur chargement candidatures', err);
         this.errorMessage.set('Impossible de charger vos candidatures');
         this.isLoading.set(false);
       }
+    });
+  }
+
+  loadInterviewsForAccepted(apps: Application[]): void {
+    const accepted = apps.filter(a => a.status === 'ACCEPTED');
+    accepted.forEach(app => {
+      this.interviewService.getByApplicationId(app.id).subscribe({
+        next: (interview) => {
+          this.interviews.update(map => ({ ...map, [app.id]: interview }));
+        },
+        error: () => {
+          this.interviews.update(map => ({ ...map, [app.id]: null }));
+        }
+      });
     });
   }
 

@@ -34,6 +34,29 @@
         <p class="application-message">"{{ app.message }}"</p>
       }
 
+      @if (app.resumeFileName) {
+        <p class="application-resume">📎 CV joint : {{ app.resumeFileName }}</p>
+      }
+
+      @if (app.status === 'ACCEPTED' && interviews()[app.id]; as interview) {
+        <div class="interview-notice">
+          <h4>📅 Entretien planifié</h4>
+          <p>{{ interview.date }} à {{ interview.time }} · {{ interview.type }}</p>
+          @if (interview.location) {
+            <p>📍 {{ interview.location }}</p>
+          }
+          @if (interview.meetingLink) {
+            <p>🔗 <a [href]="interview.meetingLink" target="_blank" rel="noopener">Rejoindre la réunion</a></p>
+          }
+          @if (!interview.result && isInterviewPast(interview.date, interview.time)) {
+            <p class="past-notice">⏳ Votre entretien est passé, le résultat sera bientôt disponible.</p>
+          }
+          @if (interview.result) {
+            <span class="badge badge-neutral">Résultat : {{ interview.result }}</span>
+          }
+        </div>
+      }
+
       @if (app.status === 'PENDING') {
         <button
           class="btn btn-danger"

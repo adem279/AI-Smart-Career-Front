@@ -38,6 +38,10 @@
         <p class="application-message">"{{ app.message }}"</p>
       }
 
+      @if (app.resumeFileName) {
+        <p class="application-resume">📎 CV joint : {{ app.resumeFileName }}</p>
+      }
+
       @if (app.status === 'PENDING') {
         <div class="application-actions">
           <button class="btn btn-accent" (click)="accept(app.id)" [disabled]="processingId() === app.id">
@@ -55,6 +59,16 @@
             <div class="interview-info">
               <h4>📅 Entretien planifié</h4>
               <p>{{ interview.date }} à {{ interview.time }} · {{ interview.type }} · {{ interview.location }}</p>
+
+              @if (interview.meetingLink) {
+                <p>🔗 <a [href]="interview.meetingLink" target="_blank" rel="noopener">{{ interview.meetingLink }}</a></p>
+              }
+
+              @if (!interview.result && isInterviewPast(interview.date, interview.time)) {
+                <div class="past-interview-alert">
+                  ⚠️ Cet entretien est passé — merci de renseigner le résultat
+                </div>
+              }
 
               @if (interview.result) {
                 <span class="badge badge-neutral">Résultat : {{ interview.result }}</span>
@@ -121,6 +135,12 @@
                   <option value="Téléphone">Téléphone</option>
                 </select>
               </div>
+              @if (interviewType === 'En ligne') {
+                <div class="form-group">
+                  <label>Lien de la réunion (Zoom, Google Meet...)</label>
+                  <input type="url" [(ngModel)]="interviewMeetingLink" name="meetingLink-{{app.id}}" placeholder="https://meet.google.com/...">
+                </div>
+              }
               <div class="schedule-actions">
                 <button class="btn btn-secondary" (click)="cancelScheduleForm()">Annuler</button>
                 <button class="btn btn-primary" (click)="confirmSchedule(app.id)">Confirmer</button>

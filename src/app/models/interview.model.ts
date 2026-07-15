@@ -5,6 +5,7 @@ export interface Interview {
   location: string;
   type: string;
   result: string | null;
+  meetingLink: string | null;
   applicationId: number;
 }
 
@@ -13,4 +14,5 @@ export interface InterviewRequest {
   time: string;
   location: string;
   type: string;
+  meetingLink?: string;
 }

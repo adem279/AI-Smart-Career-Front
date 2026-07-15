@@ -10,6 +10,7 @@ import { Application } from '../../models/application.model';
 import { JobOffer } from '../../models/job-offer.model';
 import { Interview, InterviewRequest } from '../../models/interview.model';
 import { Review } from '../../models/review.model';
+import { isInterviewPast } from '../../utils/interview.util';
 
 @Component({
   selector: 'app-offer-applications',
@@ -31,6 +32,7 @@ export class OfferApplications implements OnInit {
   interviewTime = '';
   interviewLocation = '';
   interviewType = 'Présentiel';
+  interviewMeetingLink = '';
 
   reviewingForCandidateId = signal<number | null>(null);
   reviewRating = 5;
@@ -49,6 +51,8 @@ export class OfferApplications implements OnInit {
   };
 
   ratingOptions = [1, 2, 3, 4, 5];
+
+  isInterviewPast = isInterviewPast;
 
   private offerId!: number;
 
@@ -151,6 +155,7 @@ export class OfferApplications implements OnInit {
     this.interviewTime = '';
     this.interviewLocation = '';
     this.interviewType = 'Présentiel';
+    this.interviewMeetingLink = '';
   }
 
   cancelScheduleForm(): void {
@@ -162,7 +167,8 @@ export class OfferApplications implements OnInit {
       date: this.interviewDate,
       time: this.interviewTime,
       location: this.interviewLocation,
-      type: this.interviewType
+      type: this.interviewType,
+      meetingLink: this.interviewMeetingLink || undefined
     };
 
     this.interviewService.schedule(applicationId, request).subscribe({

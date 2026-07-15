@@ -50,3 +50,8 @@
   padding: var(--space-2xl);
   max-width: 700px;
 }
+.past-notice {
+  font-size: 0.8125rem;
+  color: #92400e;
+  font-weight: 500;
+}
