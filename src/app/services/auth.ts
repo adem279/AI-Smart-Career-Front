@@ -41,6 +41,11 @@ export class AuthService {
     return localStorage.getItem('userType');
   }
 
+  getUserId(): number | null {
+    const id = localStorage.getItem('userId');
+    return id ? Number(id) : null;
+  }
+
   isLoggedIn(): boolean {
     return !!this.getToken();
   }

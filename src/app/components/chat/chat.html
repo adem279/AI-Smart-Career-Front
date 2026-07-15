@@ -1,0 +1,109 @@
+<button class="btn btn-secondary" (click)="goBack()">← Retour aux messages</button>
+
+@if (isLoading()) {
+  <p class="text-muted mt-1">Chargement...</p>
+}
+
+@if (errorMessage()) {
+  <div class="error-message mt-1">{{ errorMessage() }}</div>
+}
+
+<div class="chat-layout mt-1">
+  <div class="chat-panel card">
+    <div class="messages-thread">
+      @for (msg of messages(); track msg.id) {
+        <div class="message-bubble" [class.mine]="isMine(msg)">
+          <div class="bubble-content">
+            <p class="bubble-sender">{{ msg.senderName }}</p>
+            <p>{{ msg.content }}</p>
+            <span class="bubble-time">{{ msg.sentAt | date:'dd/MM HH:mm' }}</span>
+          </div>
+        </div>
+      }
+
+      @if (messages().length === 0) {
+        <p class="text-muted">Aucun message. Démarrez la conversation !</p>
+      }
+    </div>
+
+    <div class="message-input-row">
+      <textarea
+        [(ngModel)]="newMessageContent"
+        placeholder="Écrivez votre message..."
+        rows="2"
+        (keydown.enter)="sendMessage()">
+      </textarea>
+      <button class="btn btn-primary" (click)="sendMessage()" [disabled]="isSending()">
+        {{ isSending() ? '...' : 'Envoyer' }}
+      </button>
+    </div>
+  </div>
+
+  <div class="interview-panel card">
+    <h3>📅 Entretien</h3>
+
+    @if (interview(); as interview) {
+      <p><strong>{{ interview.date }}</strong> à {{ interview.time }}</p>
+      <p>{{ interview.type }}</p>
+      @if (interview.location) {
+        <p>📍 {{ interview.location }}</p>
+      }
+      @if (interview.meetingLink) {
+        <p>🔗 <a [href]="interview.meetingLink" target="_blank" rel="noopener">Rejoindre la réunion</a></p>
+      }
+
+      @if (!interview.result && isInterviewPast(interview.date, interview.time)) {
+        <div class="past-interview-alert">⚠️ Entretien passé — résultat à renseigner</div>
+      }
+
+      @if (interview.result) {
+        <span class="badge badge-neutral">Résultat : {{ interview.result }}</span>
+      } @else if (isCompany) {
+        <div class="result-actions">
+          <button class="btn btn-secondary btn-sm" (click)="setResult('Réussi')">Réussi</button>
+          <button class="btn btn-secondary btn-sm" (click)="setResult('Échoué')">Échoué</button>
+        </div>
+      }
+@if (isCompany && !interview.result) {
+  <button class="btn btn-danger btn-sm mt-1" (click)="cancelInterview()">Annuler l'entretien</button>
+}
+    } @else if (showScheduleForm()) {
+      <div class="mini-form">
+        <div class="form-group">
+          <label>Date</label>
+          <input type="date" [(ngModel)]="interviewDate" name="date">
+        </div>
+        <div class="form-group">
+          <label>Heure</label>
+          <input type="time" [(ngModel)]="interviewTime" name="time">
+        </div>
+        <div class="form-group">
+          <label>Lieu</label>
+          <input type="text" [(ngModel)]="interviewLocation" name="location">
+        </div>
+        <div class="form-group">
+          <label>Type</label>
+          <select [(ngModel)]="interviewType" name="type">
+            <option value="Présentiel">Présentiel</option>
+            <option value="En ligne">En ligne</option>
+            <option value="Téléphone">Téléphone</option>
+          </select>
+        </div>
+        @if (interviewType === 'En ligne') {
+          <div class="form-group">
+            <label>Lien de réunion</label>
+            <input type="url" [(ngModel)]="interviewMeetingLink" name="meetingLink">
+          </div>
+        }
+        <div class="schedule-actions">
+          <button class="btn btn-secondary" (click)="cancelScheduleForm()">Annuler</button>
+          <button class="btn btn-primary" (click)="confirmSchedule()">Confirmer</button>
+        </div>
+      </div>
+    } @else if (isCompany) {
+      <button class="btn btn-primary btn-full" (click)="openScheduleForm()">Planifier un entretien</button>
+    } @else {
+      <p class="text-muted">Aucun entretien planifié pour l'instant.</p>
+    }
+  </div>
+</div>

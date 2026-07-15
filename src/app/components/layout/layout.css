@@ -112,3 +112,12 @@
   width: 100%;
   margin: 0 auto;
 }
+.nav-badge {
+  background: var(--color-danger);
+  color: white;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  border-radius: var(--radius-full);
+  padding: 0.125rem 0.5rem;
+  margin-left: auto;
+}

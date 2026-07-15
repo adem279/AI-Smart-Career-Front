@@ -7,6 +7,8 @@ import { JobOfferDetail } from './components/job-offer-detail/job-offer-detail';
 import { MyApplications } from './components/my-applications/my-applications';
 import { Profile } from './components/profile/profile';
 import { Notifications } from './components/notifications/notifications';
+import { Messages } from './components/messages/messages';
+import { Chat } from './components/chat/chat';
 import { MyJobOffers } from './components/my-job-offers/my-job-offers';
 import { JobOfferForm } from './components/job-offer-form/job-offer-form';
 import { OfferApplications } from './components/offer-applications/offer-applications';
@@ -30,6 +32,8 @@ export const routes: Routes = [
       { path: 'profile', component: Profile },
       { path: 'candidates/:id', component: CandidatePublicProfile },
       { path: 'notifications', component: Notifications },
+      { path: 'messages', component: Messages },
+      { path: 'messages/:id', component: Chat },
       { path: 'my-job-offers', component: MyJobOffers },
       { path: 'my-job-offers/new', component: JobOfferForm },
       { path: 'my-job-offers/:id/edit', component: JobOfferForm },

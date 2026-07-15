@@ -1,0 +1,48 @@
+<div class="page-header">
+  <h1>Messagerie</h1>
+  <p>Vos conversations avec les candidatures acceptées</p>
+</div>
+
+@if (isLoading()) {
+  <p class="text-muted">Chargement...</p>
+}
+
+@if (errorMessage()) {
+  <div class="error-message">{{ errorMessage() }}</div>
+}
+
+@if (!isLoading() && conversations().length === 0 && !errorMessage()) {
+  <div class="empty-state card">
+    <p>Aucune conversation pour le moment. Une messagerie s'ouvre automatiquement dès qu'une candidature est acceptée.</p>
+  </div>
+}
+
+<div class="conversations-list">
+  @for (conv of conversations(); track conv.applicationId) {
+    <div class="conversation-card card-flat" (click)="openChat(conv.applicationId)">
+      <div class="conv-main">
+        <div class="conv-header">
+          <h3>{{ displayName(conv) }}</h3>
+          @if (conv.unreadCount > 0) {
+            <span class="unread-badge">{{ conv.unreadCount }}</span>
+          }
+        </div>
+        <p class="conv-offer">{{ conv.jobOfferTitle }}</p>
+        @if (conv.lastMessage) {
+          <p class="conv-preview">{{ conv.lastMessage }}</p>
+        } @else {
+          <p class="conv-preview conv-empty">Aucun message pour l'instant</p>
+        }
+      </div>
+
+      @if (conv.interview) {
+        <div class="conv-interview-chip">
+          📅 {{ conv.interview.date }}
+          @if (conv.interview.result) {
+            · {{ conv.interview.result }}
+          }
+        </div>
+      }
+    </div>
+  }
+</div>
