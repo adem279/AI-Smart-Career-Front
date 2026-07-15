@@ -11,6 +11,7 @@ import { MyJobOffers } from './components/my-job-offers/my-job-offers';
 import { JobOfferForm } from './components/job-offer-form/job-offer-form';
 import { OfferApplications } from './components/offer-applications/offer-applications';
 import { CompanyProfile } from './components/company-profile/company-profile';
+import { CandidatePublicProfile } from './components/candidate-public-profile/candidate-public-profile';
 import { Layout } from './components/layout/layout';
 import { authGuard } from './guards/auth-guard';
 
@@ -27,6 +28,7 @@ export const routes: Routes = [
       { path: 'job-offers/:id', component: JobOfferDetail },
       { path: 'my-applications', component: MyApplications },
       { path: 'profile', component: Profile },
+      { path: 'candidates/:id', component: CandidatePublicProfile },
       { path: 'notifications', component: Notifications },
       { path: 'my-job-offers', component: MyJobOffers },
       { path: 'my-job-offers/new', component: JobOfferForm },

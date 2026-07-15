@@ -19,4 +19,7 @@ export class CandidateService {
   updateMyProfile(request: CandidateUpdateRequest): Observable<Candidate> {
     return this.http.put<Candidate>(`${this.apiUrl}/me`, request);
   }
+  getById(id: number): Observable<Candidate> {
+  return this.http.get<Candidate>(`${this.apiUrl}/${id}`);
+}
 }

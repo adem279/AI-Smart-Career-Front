@@ -89,5 +89,170 @@
         </div>
       </form>
     }
+    <!-- Compétences -->
+    <div class="section">
+      <h3>🎯 Compétences</h3>
+      @if (skills().length === 0) {
+        <p class="text-muted">Aucune compétence renseignée.</p>
+      }
+      <div class="skills-tags">
+        @for (skill of skills(); track skill.id) {
+          <span class="skill-tag">{{ skill.skillName }} · {{ skill.level }}</span>
+        }
+      </div>
+    </div>
+
+    <!-- Formations -->
+    <div class="section">
+      <div class="section-header">
+        <h3>🎓 Formations</h3>
+        <button class="btn btn-secondary btn-sm" (click)="showEducationForm.set(!showEducationForm())">
+          {{ showEducationForm() ? 'Annuler' : '+ Ajouter' }}
+        </button>
+      </div>
+
+      @if (showEducationForm()) {
+        <div class="mini-form">
+          <div class="form-row">
+            <div class="form-group">
+              <label>Université</label>
+              <input type="text" [(ngModel)]="eduUniversity" name="eduUniversity">
+            </div>
+            <div class="form-group">
+              <label>Diplôme</label>
+              <input type="text" [(ngModel)]="eduDegree" name="eduDegree">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Début</label>
+              <input type="date" [(ngModel)]="eduStartDate" name="eduStartDate">
+            </div>
+            <div class="form-group">
+              <label>Fin</label>
+              <input type="date" [(ngModel)]="eduEndDate" name="eduEndDate">
+            </div>
+          </div>
+          <button class="btn btn-primary btn-sm" (click)="addEducation()">Enregistrer</button>
+        </div>
+      }
+
+      @if (educations().length === 0) {
+        <p class="text-muted">Aucune formation renseignée.</p>
+      }
+      @for (edu of educations(); track edu.id) {
+        <div class="item-row">
+          <div>
+            <strong>{{ edu.degree }}</strong>
+            <p>{{ edu.university }} · {{ edu.startDate }} - {{ edu.endDate }}</p>
+          </div>
+          <button class="btn-icon-delete" (click)="deleteEducation(edu.id)">✕</button>
+        </div>
+      }
+    </div>
+
+    <!-- Expériences -->
+    <div class="section">
+      <div class="section-header">
+        <h3>💼 Expériences</h3>
+        <button class="btn btn-secondary btn-sm" (click)="showExperienceForm.set(!showExperienceForm())">
+          {{ showExperienceForm() ? 'Annuler' : '+ Ajouter' }}
+        </button>
+      </div>
+
+      @if (showExperienceForm()) {
+        <div class="mini-form">
+          <div class="form-row">
+            <div class="form-group">
+              <label>Entreprise</label>
+              <input type="text" [(ngModel)]="expCompany" name="expCompany">
+            </div>
+            <div class="form-group">
+              <label>Poste</label>
+              <input type="text" [(ngModel)]="expPosition" name="expPosition">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Début</label>
+              <input type="date" [(ngModel)]="expStartDate" name="expStartDate">
+            </div>
+            <div class="form-group">
+              <label>Fin</label>
+              <input type="date" [(ngModel)]="expEndDate" name="expEndDate">
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Description</label>
+            <textarea [(ngModel)]="expDescription" name="expDescription" rows="3"></textarea>
+          </div>
+          <button class="btn btn-primary btn-sm" (click)="addExperience()">Enregistrer</button>
+        </div>
+      }
+
+      @if (experiences().length === 0) {
+        <p class="text-muted">Aucune expérience renseignée.</p>
+      }
+      @for (exp of experiences(); track exp.id) {
+        <div class="item-row">
+          <div>
+            <strong>{{ exp.position }}</strong>
+            <p>{{ exp.company }} · {{ exp.startDate }} - {{ exp.endDate }}</p>
+            <p class="text-muted">{{ exp.description }}</p>
+          </div>
+          <button class="btn-icon-delete" (click)="deleteExperience(exp.id)">✕</button>
+        </div>
+      }
+    </div>
+
+    <!-- Portfolio -->
+    <div class="section">
+      <div class="section-header">
+        <h3>🚀 Projets</h3>
+        <button class="btn btn-secondary btn-sm" (click)="showPortfolioForm.set(!showPortfolioForm())">
+          {{ showPortfolioForm() ? 'Annuler' : '+ Ajouter' }}
+        </button>
+      </div>
+
+      @if (showPortfolioForm()) {
+        <div class="mini-form">
+          <div class="form-group">
+            <label>Titre</label>
+            <input type="text" [(ngModel)]="portTitle" name="portTitle">
+          </div>
+          <div class="form-group">
+            <label>Description</label>
+            <textarea [(ngModel)]="portDescription" name="portDescription" rows="3"></textarea>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>URL du projet</label>
+              <input type="url" [(ngModel)]="portProjectUrl" name="portProjectUrl">
+            </div>
+            <div class="form-group">
+              <label>GitHub</label>
+              <input type="url" [(ngModel)]="portGithubUrl" name="portGithubUrl">
+            </div>
+          </div>
+          <button class="btn btn-primary btn-sm" (click)="addPortfolio()">Enregistrer</button>
+        </div>
+      }
+
+      @if (portfolios().length === 0) {
+        <p class="text-muted">Aucun projet renseigné.</p>
+      }
+      @for (port of portfolios(); track port.id) {
+        <div class="item-row">
+          <div>
+            <strong>{{ port.title }}</strong>
+            <p>{{ port.description }}</p>
+            @if (port.projectUrl) {
+              <a [href]="port.projectUrl" target="_blank">🔗 Voir le projet</a>
+            }
+          </div>
+          <button class="btn-icon-delete" (click)="deletePortfolio(port.id)">✕</button>
+        </div>
+      }
+    </div>
   </div>
 }

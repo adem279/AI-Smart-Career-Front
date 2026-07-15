@@ -15,4 +15,7 @@ export class CandidateSkillService {
   getMySkills(): Observable<CandidateSkill[]> {
     return this.http.get<CandidateSkill[]>(`${this.apiUrl}/me`);
   }
+  getByCandidateId(candidateId: number): Observable<CandidateSkill[]> {
+  return this.http.get<CandidateSkill[]>(`${this.apiUrl}/candidate/${candidateId}`);
+}
 }

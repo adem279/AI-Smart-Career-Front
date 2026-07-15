@@ -26,7 +26,7 @@
     <div class="application-card card-flat">
       <div class="application-header">
         <div>
-          <h3>{{ app.candidateName }}</h3>
+         <h3><a [routerLink]="['/candidates', app.candidateId]">{{ app.candidateName }}</a></h3>
           <p class="application-date">Postulé le {{ app.applicationDate | date:'dd/MM/yyyy à HH:mm' }}</p>
         </div>
         <span class="badge" [class]="statusBadgeClass[app.status]">

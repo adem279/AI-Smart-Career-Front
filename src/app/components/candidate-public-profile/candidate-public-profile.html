@@ -1,0 +1,86 @@
+<button class="btn btn-secondary" (click)="goBack()">← Retour</button>
+
+@if (isLoading()) {
+  <p class="text-muted mt-1">Chargement...</p>
+}
+
+@if (errorMessage()) {
+  <div class="error-message mt-1">{{ errorMessage() }}</div>
+}
+
+@if (candidate(); as candidate) {
+  <div class="profile-card card mt-1">
+    <div class="profile-header">
+      <div class="avatar">{{ candidate.firstName[0] }}{{ candidate.lastName[0] }}</div>
+      <div>
+        <h2>{{ candidate.firstName }} {{ candidate.lastName }}</h2>
+        <p>{{ candidate.email }}</p>
+      </div>
+    </div>
+
+    @if (candidate.bio) {
+      <p class="bio">{{ candidate.bio }}</p>
+    }
+
+    <div class="section">
+      <h3>🎯 Compétences</h3>
+      @if (skills().length === 0) {
+        <p class="text-muted">Aucune compétence renseignée.</p>
+      }
+      <div class="skills-tags">
+        @for (skill of skills(); track skill.id) {
+          <span class="skill-tag">{{ skill.skillName }} · {{ skill.level }}</span>
+        }
+      </div>
+    </div>
+
+    <div class="section">
+      <h3>🎓 Formations</h3>
+      @if (educations().length === 0) {
+        <p class="text-muted">Aucune formation renseignée.</p>
+      }
+      @for (edu of educations(); track edu.id) {
+        <div class="item-row">
+          <div>
+            <strong>{{ edu.degree }}</strong>
+            <p>{{ edu.university }} · {{ edu.startDate }} - {{ edu.endDate }}</p>
+          </div>
+        </div>
+      }
+    </div>
+
+    <div class="section">
+      <h3>💼 Expériences</h3>
+      @if (experiences().length === 0) {
+        <p class="text-muted">Aucune expérience renseignée.</p>
+      }
+      @for (exp of experiences(); track exp.id) {
+        <div class="item-row">
+          <div>
+            <strong>{{ exp.position }}</strong>
+            <p>{{ exp.company }} · {{ exp.startDate }} - {{ exp.endDate }}</p>
+            <p class="text-muted">{{ exp.description }}</p>
+          </div>
+        </div>
+      }
+    </div>
+
+    <div class="section">
+      <h3>🚀 Projets</h3>
+      @if (portfolios().length === 0) {
+        <p class="text-muted">Aucun projet renseigné.</p>
+      }
+      @for (port of portfolios(); track port.id) {
+        <div class="item-row">
+          <div>
+            <strong>{{ port.title }}</strong>
+            <p>{{ port.description }}</p>
+            @if (port.projectUrl) {
+              <a [href]="port.projectUrl" target="_blank">🔗 Voir le projet</a>
+            }
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+}

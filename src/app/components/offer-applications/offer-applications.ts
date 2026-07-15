@@ -2,6 +2,7 @@ import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { RouterLink } from '@angular/router';
 import { ApplicationService } from '../../services/application';
 import { JobOfferService } from '../../services/job-offer';
 import { InterviewService } from '../../services/interview';
@@ -14,7 +15,7 @@ import { isInterviewPast } from '../../utils/interview.util';
 
 @Component({
   selector: 'app-offer-applications',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterLink],
   templateUrl: './offer-applications.html',
   styleUrl: './offer-applications.css'
 })
